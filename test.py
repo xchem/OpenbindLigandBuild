@@ -84,9 +84,9 @@ if __name__ == "__main__":
                     epilog='Text at the bottom of help')
     
     parser.add_argument('--pandda_dir')
-    parser.parse_args()
-    print(parser)
+    args = parser.parse_args()
+    print(args)
 
     main(
-        parser.pandda_dir,
+        args.pandda_dir,
     )
