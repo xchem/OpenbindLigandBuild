@@ -49,12 +49,12 @@ def sbatch(script, script_file):
 
     # Submit
     
-    stdout, stderr = subprocess.Popen(
-        f'chmod 777 {script_file}; sbatch {script_file}', 
-        shell=True, 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE,
-        )
+    # stdout, stderr = subprocess.Popen(
+    #     f'chmod 777 {script_file}; sbatch {script_file}', 
+    #     shell=True, 
+    #     stdout=subprocess.PIPE, 
+    #     stderr=subprocess.PIPE,
+    #     )
     
 def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
     ground_state_ccp4 = gemmi.read_ccp4_map(str(ground_state_file), setup=False)
