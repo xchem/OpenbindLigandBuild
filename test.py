@@ -81,7 +81,7 @@ def main(pandda_dir):
                     pandda_dir=pandda_dir,
                     dtag=dtag,
                     event_map=EVENT_MAP_PATTERN.format(dtag=dtag, event_idx=event_idx, bdc=bdc),
-                    cif=cifs[0],
+                    cif=cifs[0].name,
                     pandda_2_dir=PANDDA_2_DIR,
                 ),
                 script_file
