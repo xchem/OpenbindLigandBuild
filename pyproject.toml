@@ -12,7 +12,7 @@ classifiers = [
 description = "A repository to test autobuilding of PanDDA 2 event maps"
 dependencies = [
     'pandas',
-    'pyyaml',
+    'pyyaml', 
     'gemmi'
 ] 
 dynamic = ["version"]

@@ -35,6 +35,7 @@ EVENT_MAP_PATTERN = '{dtag}-event_{event_idx}_1-BDC_{bdc}_map.native.ccp4'
 PANDDA_2_DIR = '/dls_sw/i04-1/software/PanDDA2'
 
 def sbatch(script, script_file):
+    print('# SCRIPT')
     print(script)
 
     # Write the script 
@@ -51,19 +52,25 @@ def sbatch(script, script_file):
 
 def main(pandda_dir):
     pandda_dir = pathlib.Path(pandda_dir)
+    print('# PanDDA Dir')
     print(pandda_dir)
 
     # Determine which builds to perform. More than one binder is unlikely and score ranks well so build the best scoring event of each dataset.     
     panddas_events = pd.read_csv(pandda_dir / 'analyses' / 'pandda_analyse_events.csv')
     best_events = panddas_events[panddas_events['z_mean'] == panddas_events.groupby(by='dtag')['z_mean'].transform(max)]
+    print('# Best Events')
     print(best_events)
 
     # Submit jobs
+    print('# Jobs')
     for _, event_row in best_events.iterrows():
         dtag, event_idx, bdc = event_row['dtag'], event_row['event_idx'], event_row['1-BDC']
         print(f'{dtag} : {event_idx}')
         dataset_dir = pandda_dir / 'processed_datasets' / dtag
         ligand_dir = dataset_dir / 'ligand_files'
+        script_file = dataset_dir / f'rhofit_{event_idx}.slurm'
+        print('# # Script File')
+        print(script_file)
         
         # Really all the cifs should be tried and the best used, or it should try the best cif from PanDDA
         # This is a temporary fix that will get 90% of situations that can be improved upon
@@ -77,7 +84,7 @@ def main(pandda_dir):
                     cif=cifs[0],
                     pandda_2_dir=PANDDA_2_DIR,
                 ),
-                dataset_dir / f'rhofit_{event_idx}.slurm'
+                script_file
             )
 
 if __name__ == "__main__":
