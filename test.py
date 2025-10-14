@@ -119,7 +119,7 @@ def remove_nearby_atoms(pdb_file, coord, radius, output_file):
                 
                 if add_res:
                     print(new_st[model.num])
-                    new_st[model.num][chain.name].add_residue(res)
+                    new_st[int(model.num)][chain.name].add_residue(res)
     
     new_st.write_pdb(str(output_file))
 
