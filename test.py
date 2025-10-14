@@ -123,7 +123,7 @@ def main(pandda_dir):
                 SCRIPT.format(
                     pandda_dir=pandda_dir,
                     dtag=dtag,
-                    event_map=EVENT_MAP_PATTERN.format(dtag=dtag, event_idx=event_idx, bdc=bdc),
+                    event_map=expanded_event_map,
                     cif=cifs[0],
                     pandda_2_dir=PANDDA_2_DIR,
                 ),
