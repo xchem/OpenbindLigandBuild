@@ -18,10 +18,10 @@ module load buster
             
 DATASET_DIR="{pandda_dir}/processed_datasets/{dtag}"
 MODELLED_STRUCTURES_DIR="$DATASET_DIR"/modelled_structures
-PDB="$DATASET_DIR"/"{dtag}-pandda-input.pdb"
-MTZ="$DATASET_DIR"/"{dtag}-pandda-input.mtz"
-MAP="$DATASET_DIR"/"{event_map}"
-CIF="$DATASET_DIR"/ligand_files/"{cif}"
+PDB="$DATASET_DIR"/"{dtag}-pandda-input.pdb
+MTZ="$DATASET_DIR"/"{dtag}-pandda-input.mtz
+MAP="$DATASET_DIR"/"{event_map}
+CIF={cif}
 OUT="$MODELLED_STRUCTURES_DIR"/rhofit
 
 {pandda_2_dir}/scripts/pandda_rhofit.sh -pdb "$PDB" -map "$MAP" -mtz "$MTZ" -cif "$CIF" -out "$OUT"
