@@ -24,13 +24,15 @@ MAP=DATASET_DIR/"{event_map}"
 CIF=DATASET_DIR/ligand_files/"{cif}"
 OUT=MODELLED_STRUCTURES_DIR/rhofit
 
-PanDDA2/scripts/pandda_rhofit.sh -pdb $PDB -map $MAP -mtz $MTZ -cif $CIF -out $OUT
-cp MODELLED_STRUCTURES_DIR/pandda-model.pdb pandda-internal-fitted.pdb
-cp OUT/... MODELLED_STRUCTURES_DIR/pandda-model.pdb
+{pandda_2_dir}/scripts/pandda_rhofit.sh -pdb $PDB -map $MAP -mtz $MTZ -cif $CIF -out $OUT
+cp $MODELLED_STRUCTURES_DIR/{dtag}-pandda-model.pdb $MODELLED_STRUCTURES_DIR/pandda-internal-fitted.pdb
+cp $OUT/... $MODELLED_STRUCTURES_DIR/{dtag}-pandda-model.pdb
 
 """
 
 EVENT_MAP_PATTERN = '{dtag}-event_{event_idx}_1-BDC_{bdc}_map.native.ccp4'
+
+PANDDA_2_DIR = '/dls_sw/i04-1/software/PanDDA2'
 
 def sbatch(script, script_file):
     print(script)
@@ -73,6 +75,7 @@ def main(pandda_dir):
                     dtag=dtag,
                     event_map=EVENT_MAP_PATTERN.format(dtag=dtag, event_idx=event_idx, bdc=bdc),
                     cif=cifs[0],
+                    pandda_2_dir=PANDDA_2_DIR,
                 ),
                 dataset_dir / f'rhofit_{event_idx}.slurm'
             )
