@@ -70,7 +70,7 @@ def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
     event_map = gemmi.FloatGrid(xmap.nu, xmap.nv, xmap.nw)
     event_map.unit_cell = xmap.unit_cell
     event_map_array = np.array(event_map, copy=False)
-    event_map_array[:,:,:] = np.array(xmap[:,:,:]) - (bdc*np.array(ground_state[:,:,:]))
+    event_map_array[:,:,:] = np.array(xmap)[:,:,:] - (bdc*np.array(ground_state)[:,:,:])
 
     event_map.write_ccp4_map(out_file)
 
