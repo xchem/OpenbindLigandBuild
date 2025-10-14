@@ -85,6 +85,7 @@ if __name__ == "__main__":
     
     parser.add_argument('--pandda_dir')
     parser.parse_args()
+    print(parser)
 
     main(
         parser.pandda_dir,
