@@ -58,14 +58,14 @@ def sbatch(script, script_file):
     
 def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
     ground_state_ccp4 = gemmi.read_ccp4_map(str(ground_state_file), setup=False)
+    ground_state_ccp4.grid.spacegroup = gemmi.find_spacegroup_by_name('P1')
+    ground_state_ccp4.setup(0.0)
     ground_state = ground_state_ccp4.grid 
-    ground_state.spacegroup = gemmi.find_spacegroup_by_name('P1')
-    ground_state.setup(0.0)
 
     xmap_ccp4 = gemmi.read_ccp4_map(str(xmap_file), setup=False)
+    xmap.grid.spacegroup = gemmi.find_spacegroup_by_name('P1')
+    xmap_ccp4.setup(0.0)
     xmap = xmap_ccp4.grid 
-    xmap.spacegroup = gemmi.find_spacegroup_by_name('P1')
-    xmap.setup(0.0)
 
     event_map = gemmi.FloatGrid(xmap.nu, xmap.nv, xmap.nw)
     event_map.unit_cell = xmap.unit_cell
