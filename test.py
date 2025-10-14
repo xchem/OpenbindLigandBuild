@@ -63,7 +63,7 @@ def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
     ground_state = ground_state_ccp4.grid 
 
     xmap_ccp4 = gemmi.read_ccp4_map(str(xmap_file), setup=False)
-    xmap.grid.spacegroup = gemmi.find_spacegroup_by_name('P1')
+    xmap_ccp4.grid.spacegroup = gemmi.find_spacegroup_by_name('P1')
     xmap_ccp4.setup(0.0)
     xmap = xmap_ccp4.grid 
 
