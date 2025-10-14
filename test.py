@@ -106,8 +106,8 @@ def remove_nearby_atoms(pdb_file, coord, radius, output_file):
     #     del new_st[model_name][chain_name]
 
     # Add residues
-    for model in st:
-        for j, chain in enumerate(model):
+    for j, model in enumerate(st):
+        for k, chain in enumerate(model):
             # new_st.add_chain(gemmi.Chain(chain.name))
             for res in chain:
                 add_res = True
@@ -119,8 +119,8 @@ def remove_nearby_atoms(pdb_file, coord, radius, output_file):
                 
                 if add_res:
                     print(new_st[j])
-                    print(new_st[j][chain.name])
-                    new_st[j][chain.name].add_residue(res)
+                    print(new_st[j][k])
+                    new_st[j][k].add_residue(res)
     
     new_st.write_pdb(str(output_file))
 
