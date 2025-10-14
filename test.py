@@ -34,7 +34,7 @@ EVENT_MAP_PATTERN = '{dtag}-event_{event_idx}_1-BDC_{bdc}_map.native.ccp4'
 
 def sbatch(script, script_file):
     print(script)
-    
+
     # Write the script 
     with open(script_file, 'w') as f:
         f.write(script)
@@ -84,6 +84,7 @@ if __name__ == "__main__":
                     epilog='Text at the bottom of help')
     
     parser.add_argument('pandda_dir')
+    parser.parse_args()
 
     main(
         parser.pandda_dir,
