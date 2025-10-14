@@ -56,7 +56,7 @@ def sbatch(script, script_file):
     #     stderr=subprocess.PIPE,
     #     )
     
-def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
+def expand_event_map(bdc, ground_state_file, xmap_file, coord, out_file):
     ground_state_ccp4 = gemmi.read_ccp4_map(str(ground_state_file), setup=False)
     ground_state_ccp4.grid.spacegroup = gemmi.find_spacegroup_by_name('P1')
     ground_state_ccp4.setup(0.0)
@@ -67,18 +67,51 @@ def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
     xmap_ccp4.setup(0.0)
     xmap = xmap_ccp4.grid 
 
+    mask = gemmi.FloatGrid(xmap.nu, xmap.nv, xmap.nw)
+    mask.set_points_around(gemmi.Position(coord[0], coord[1], coord[2]), radius=10.0, value=1.0)
+
     event_map = gemmi.FloatGrid(xmap.nu, xmap.nv, xmap.nw)
     event_map.unit_cell = xmap.unit_cell
     event_map_array = np.array(event_map, copy=False)
     event_map_array[:,:,:] = np.array(xmap)[:,:,:] - (bdc*np.array(ground_state)[:,:,:])
+    event_map_array[:,:,:] = event_map_array[:,:,:]*np.array(mask)[:,:,:]
 
     ccp4 = gemmi.Ccp4Map()
     ccp4.grid = event_map
     ccp4.update_ccp4_header()
     ccp4.write_ccp4_map(str(out_file))
 
+def remove_nearby_atoms(pdb_file, coord, radius, output_file):
+    st = gemmi.read_structure(str(pdb_file))
+    new_st = st.clone()
 
+    coord_array = np.array([coord[0], coord[1], coord[2]])
 
+    # Delete chains
+    chains_to_delete = []
+    for model in st:
+        for chain in model:
+            chains_to_delete.append((model.name, chain.name))
+
+    for model_name, chain_name in chains_to_delete:
+        del st[model_name][chain_name]
+
+    # Add residues
+    for model in st:
+        for chain in model:
+            new_st.add_chain(chain)
+            for res in chain:
+                add_res = True
+                for atom in res:
+                    pos = atom.pos
+                    distance = np.linalg.norm(coord_array - np.array([pos.x, pos.y, pos.z]))
+                    if distance < radius:
+                        add_res = False
+                
+                if add_res:
+                    new_st[model.number][chain.name].add_residue(res)
+    
+    new_st.write_pdb(str(output_file))
 
 
 def main(pandda_dir):
@@ -95,7 +128,8 @@ def main(pandda_dir):
     # Submit jobs
     print('# Jobs')
     for _, event_row in best_events.iterrows():
-        dtag, event_idx, bdc = event_row['dtag'], event_row['event_idx'], event_row['1-BDC']
+        dtag, event_idx, bdc, x, y, z = event_row['dtag'], event_row['event_idx'], event_row['1-BDC'], event_row['x'], event_row['y'], event_row['z']
+        coord = [x,y,z]
         print(f'{dtag} : {event_idx}')
         dataset_dir = pandda_dir / 'processed_datasets' / dtag
         ligand_dir = dataset_dir / 'ligand_files'
@@ -103,14 +137,24 @@ def main(pandda_dir):
         ground_state_file = dataset_dir / GROUND_STATE_PATTERN.format(dtag=dtag)
         xmap_file = dataset_dir / 'xmap.ccp4'
         expanded_event_map = dataset_dir / 'event_map.ccp4'
+        pdb_file = dataset_dir / f'{dtag}-pandda-input.pdb'
+        restricted_pdb_file = dataset_dir / f'cut_input_model.pdb'
 
         print('# # Expand event map')
         expand_event_map(
             bdc,
             ground_state_file,
             xmap_file,
+            coord,
             expanded_event_map,
-            )
+        )
+
+        remove_nearby_atoms(
+            pdb_file,
+            coord,
+            10.0,
+            restricted_pdb_file,
+        )
 
         print('# # Script File')
         print(script_file)
