@@ -28,7 +28,7 @@ CIF={cif}
 OUT="$MODELLED_STRUCTURES_DIR"/rhofit
 
 mkdir "$OUT"
-{pandda_2_dir}/scripts/pandda_rhofit.sh -pdb "$PDB" -map "$MAP" -mtz "$MTZ" -cif "$CIF" -out "$OUT"
+{pandda_2_dir}/scripts/pandda_rhofit.sh -pdb "$PDB" -map "$MAP" -mtz "$MTZ" -cif "$CIF" -out "$OUT" -cut {cut}
 cp "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb "$MODELLED_STRUCTURES_DIR"/pandda-internal-fitted.pdb
 cp "$OUT"/... "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb
 
@@ -76,10 +76,15 @@ def expand_event_map(bdc, ground_state_file, xmap_file, coord, out_file):
     event_map_array[:,:,:] = np.array(xmap)[:,:,:] - (bdc*np.array(ground_state)[:,:,:])
     event_map_array[:,:,:] = event_map_array[:,:,:]*np.array(mask)[:,:,:]
 
+    event_map_non_zero = event_map_array[event_map_array != 0.0]
+    cut = np.std(event_map_non_zero)
+
     ccp4 = gemmi.Ccp4Map()
     ccp4.grid = event_map
     ccp4.update_ccp4_header()
     ccp4.write_ccp4_map(str(out_file))
+
+    return cut
 
 def remove_nearby_atoms(pdb_file, coord, radius, output_file):
     st = gemmi.read_structure(str(pdb_file))
@@ -149,14 +154,16 @@ def main(pandda_dir):
         restricted_pdb_file = dataset_dir / f'cut_input_model.pdb'
 
         print('# # Expand event map')
-        expand_event_map(
+        cut = expand_event_map(
             bdc,
             ground_state_file,
             xmap_file,
             coord,
             expanded_event_map,
         )
+        print(f'Got cut: {cut}')
 
+        print('# # Remove nearby atoms to make room for autobuilding')
         remove_nearby_atoms(
             pdb_file,
             coord,
@@ -178,6 +185,7 @@ def main(pandda_dir):
                     event_map=expanded_event_map.name,
                     cif=cifs[0],
                     pandda_2_dir=PANDDA_2_DIR,
+                    cut=cut,
                 ),
                 script_file
             )
