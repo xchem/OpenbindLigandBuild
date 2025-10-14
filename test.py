@@ -17,16 +17,16 @@ module load buster
 # (probably module load pandda2 here)
             
 DATASET_DIR="{pandda_dir}/processed_datasets/{dtag}"
-MODELLED_STRUCTURES_DIR=DATASET_DIR/modelled_structures
-PDB=DATASET_DIR/"{dtag}-pandda-input.pdb"
-MTZ=DATASET_DIR/"{dtag}-pandda-input.mtz"
-MAP=DATASET_DIR/"{event_map}"
-CIF=DATASET_DIR/ligand_files/"{cif}"
-OUT=MODELLED_STRUCTURES_DIR/rhofit
+MODELLED_STRUCTURES_DIR="$DATASET_DIR"/modelled_structures
+PDB="$DATASET_DIR"/"{dtag}-pandda-input.pdb"
+MTZ="$DATASET_DIR"/"{dtag}-pandda-input.mtz"
+MAP="$DATASET_DIR"/"{event_map}"
+CIF="$DATASET_DIR"/ligand_files/"{cif}"
+OUT="$MODELLED_STRUCTURES_DIR"/rhofit
 
-{pandda_2_dir}/scripts/pandda_rhofit.sh -pdb $PDB -map $MAP -mtz $MTZ -cif $CIF -out $OUT
-cp $MODELLED_STRUCTURES_DIR/{dtag}-pandda-model.pdb $MODELLED_STRUCTURES_DIR/pandda-internal-fitted.pdb
-cp $OUT/... $MODELLED_STRUCTURES_DIR/{dtag}-pandda-model.pdb
+{pandda_2_dir}/scripts/pandda_rhofit.sh -pdb "$PDB" -map "$MAP" -mtz "$MTZ" -cif "$CIF" -out "$OUT"
+cp "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb "$MODELLED_STRUCTURES_DIR"/pandda-internal-fitted.pdb
+cp "$OUT"/... "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb
 
 """
 
