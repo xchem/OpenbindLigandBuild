@@ -4,6 +4,9 @@ import pandas as pd
 import pathlib
 import yaml
 import subprocess
+import gemmi
+import numpy as np
+
 
 SCRIPT = """#/bin/sh
 #SBATCH --nodes=1
@@ -24,6 +27,7 @@ MAP="$DATASET_DIR"/{event_map}
 CIF={cif}
 OUT="$MODELLED_STRUCTURES_DIR"/rhofit
 
+mkdir "$OUT"
 {pandda_2_dir}/scripts/pandda_rhofit.sh -pdb "$PDB" -map "$MAP" -mtz "$MTZ" -cif "$CIF" -out "$OUT"
 cp "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb "$MODELLED_STRUCTURES_DIR"/pandda-internal-fitted.pdb
 cp "$OUT"/... "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb
@@ -31,6 +35,7 @@ cp "$OUT"/... "$MODELLED_STRUCTURES_DIR"/{dtag}-pandda-model.pdb
 """
 
 EVENT_MAP_PATTERN = '{dtag}-event_{event_idx}_1-BDC_{bdc}_map.native.ccp4'
+GROUND_STATE_PATTERN = '{dtag}-ground-state-average-map.native.ccp4'
 
 PANDDA_2_DIR = '/dls_sw/i04-1/software/PanDDA2'
 
@@ -43,12 +48,35 @@ def sbatch(script, script_file):
         f.write(script)
 
     # Submit
+    
     stdout, stderr = subprocess.Popen(
         f'chmod 777 {script_file}; sbatch {script_file}', 
         shell=True, 
         stdout=subprocess.PIPE, 
         stderr=subprocess.PIPE,
         )
+    
+def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
+    ground_state_ccp4 = gemmi.read_ccp4_map(str(ground_state_file), setup=False)
+    ground_state = ground_state_ccp4.grid 
+    ground_state.spacegroup = gemmi.find_spacegroup_by_name('P1')
+    ground_state.setup(0.0)
+
+    xmap_ccp4 = gemmi.read_ccp4_map(str(xmap_file), setup=False)
+    xmap = xmap_ccp4.grid 
+    xmap.spacegroup = gemmi.find_spacegroup_by_name('P1')
+    xmap.setup(0.0)
+
+    event_map = gemmi.FloatGrid(xmap.nu, xmap.nv, xmap.nw)
+    event_map.unit_cell = xmap.unit_cell
+    event_map_array = np.array(event_map, copy=False)
+    event_map_array[:,:,:] = np.array(xmap[:,:,:]) - (bdc*np.array(ground_state[:,:,:]))
+
+    event_map.write_ccp4_map(out_file)
+
+
+
+
 
 def main(pandda_dir):
     pandda_dir = pathlib.Path(pandda_dir)
@@ -69,6 +97,18 @@ def main(pandda_dir):
         dataset_dir = pandda_dir / 'processed_datasets' / dtag
         ligand_dir = dataset_dir / 'ligand_files'
         script_file = dataset_dir / f'rhofit_{event_idx}.slurm'
+        ground_state_file = dataset_dir / GROUND_STATE_PATTERN.format(dtag=dtag)
+        xmap_file = dataset_dir / 'xmap.ccp4'
+        expanded_event_map = dataset_dir / 'event_map.ccp4'
+
+        print('# # Expand event map')
+        expand_event_map(
+            bdc,
+            ground_state_file,
+            xmap_file,
+            expanded_event_map,
+            )
+
         print('# # Script File')
         print(script_file)
         
