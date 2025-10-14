@@ -72,7 +72,10 @@ def expand_event_map(bdc, ground_state_file, xmap_file, out_file):
     event_map_array = np.array(event_map, copy=False)
     event_map_array[:,:,:] = np.array(xmap)[:,:,:] - (bdc*np.array(ground_state)[:,:,:])
 
-    event_map.write_ccp4_map(out_file)
+    ccp4 = gemmi.Ccp4Map()
+    ccp4.grid = event_map
+    ccp4.update_ccp4_header()
+    ccp4.write_ccp4_map(out_file)
 
 
 
