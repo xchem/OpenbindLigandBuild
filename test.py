@@ -95,7 +95,7 @@ def remove_nearby_atoms(pdb_file, coord, radius, output_file):
 
     for model in new_st:
         for chain in model:
-            print(model.name)
+            print([model.num, chain.name])
 
     for model_name, chain_name in chains_to_delete:
         print(new_st)
