@@ -30,7 +30,8 @@ PROTEIN_RESIDUES = ["ALA",
                  ]
 
 def get_contact_chain(protein_st, ligand_st):
-    
+    """A simple estimation of the contact chain based on which chain has the most atoms
+    nearby."""
     ligand_pos_list = []
     for model in protein_st:
         for chain in model:
