@@ -162,6 +162,8 @@ def main(pandda_dir):
             coord,
             expanded_event_map,
         )
+        cut=2.0
+        expanded_event_map = dataset_dir / f'{dtag}-z_map.native.ccp4'
         print(f'Got cut: {cut}')
 
         print('# # Remove nearby atoms to make room for autobuilding')
