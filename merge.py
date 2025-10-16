@@ -64,8 +64,8 @@ def main(dataset_dir):
     protein_st_file = dataset_dir / f'{dtag}-pandda-input.pdb'
     ligand_st_file = dataset_dir / 'modelled_structures' / 'rhofit' / 'rhofit' / 'best.pdb'
 
-    protein_st = gemmi.read_structure(protein_st_file)
-    ligand_st = gemmi.read_structure(ligand_st_file)
+    protein_st = gemmi.read_structure(str(protein_st_file))
+    ligand_st = gemmi.read_structure(str(ligand_st_file))
 
     contact_chain = get_contact_chain(protein_st, ligand_st)
     print(contact_chain)
