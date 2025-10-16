@@ -2,7 +2,6 @@
 import argparse
 import pandas as pd
 import pathlib
-import yaml
 import subprocess
 import gemmi
 import numpy as np
