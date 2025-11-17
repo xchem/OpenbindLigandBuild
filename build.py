@@ -234,7 +234,7 @@ def main(dataset_dir):
     print(script_file)
 
     # Get the cut for rhofit
-    cut = get_map_cut(dmap, 2.0)
+    cut = get_map_cut(dmap, dmap_cut)
     
     # Really all the cifs should be tried and the best used, or it should try the best 
     # cif from PanDDA
