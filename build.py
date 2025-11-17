@@ -169,7 +169,10 @@ def main(dataset_dir):
 
     # Determine which builds to perform. More than one binder is unlikely and score ranks 
     # well so build the best scoring event of each dataset.     
-    event_info = yaml.safe_load(dataset_dir / 'events.yaml')
+    event_yaml_path = dataset_dir / 'events.yaml'
+    print(f'Getting event info from: {event_yaml_path}')
+    with open(event_yaml_path, 'r') as f:
+        event_info = yaml.safe_load(f)
     
     event_scores = {}
     for event_id, event_info in event_info.items():
