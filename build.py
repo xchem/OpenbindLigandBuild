@@ -58,13 +58,12 @@ def sbatch(script, script_file):
         f.write(script)
 
     # Submit - currently deactivated for testing
-    
-    # stdout, stderr = subprocess.Popen(
-    #     f'chmod 777 {script_file}; sbatch {script_file}', 
-    #     shell=True, 
-    #     stdout=subprocess.PIPE, 
-    #     stderr=subprocess.PIPE,
-    #     )
+    stdout, stderr = subprocess.Popen(
+        f'chmod 777 {script_file}; sbatch {script_file}', 
+        shell=True, 
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE,
+        )
     
 def save_xmap(xmap, xmap_file):
     """Convenience script for saving ccp4 files."""
