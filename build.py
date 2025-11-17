@@ -169,11 +169,6 @@ def main(dataset_dir):
 
     # Determine which builds to perform. More than one binder is unlikely and score ranks 
     # well so build the best scoring event of each dataset.     
-    # panddas_events = pd.read_csv(pandda_dir / 'analyses' / 'pandda_analyse_events.csv')
-    # best_events = panddas_events[panddas_events['z_mean'] == panddas_events.groupby(by='dtag')['z_mean'].transform(max)]
-    # print('# Best Events')
-    # print(best_events)
-
     event_info = yaml.safe_load(dataset_dir / 'events.yaml')
     
     event_scores = {}
