@@ -163,7 +163,7 @@ def main(dataset_dir):
     """
     Script to set up a sbatch script to use rhofit to build the best event for a PanDDA dataset
     """
-    dataset_dir = pathlib.Path(dataset_dir)
+    dataset_dir = pathlib.Path(dataset_dir).resolve()
     print('# PanDDA Dir')
     print(dataset_dir)
 
@@ -182,6 +182,7 @@ def main(dataset_dir):
 
     # Submit jobs
     print('# Jobs')
+    print(event_info)
     dtag = dataset_dir.name
     event_idx, bdc, x, y, z = (
         best_event_id,
