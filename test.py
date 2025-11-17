@@ -21,7 +21,7 @@ module load buster
             
 DATASET_DIR="{pandda_dir}/processed_datasets/{dtag}"
 MODELLED_STRUCTURES_DIR="$DATASET_DIR"/modelled_structures
-PDB="$DATASET_DIR"/cut_input_model.pdb
+PDB="$DATASET_DIR"/build.pdb
 MTZ="$DATASET_DIR"/{dtag}-pandda-input.mtz
 MAP="$DATASET_DIR"/{build_map}
 CIF={cif}
