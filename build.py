@@ -196,7 +196,8 @@ def main(dataset_dir):
     dataset_dir = pathlib.Path(dataset_dir).resolve()
     ligand_dir = dataset_dir / 'ligand_files'
     script_file = dataset_dir / f'rhofit_{event_idx}.slurm'
-    build_dmap = dataset_dir / f'{dtag}-z_map.native.ccp4'
+    # build_dmap = dataset_dir / f'{dtag}-z_map.native.ccp4'
+    build_dmap = dataset_dir / f'{dtag}-event_{event_idx}_1-BDC_{bdc}_map.native.ccp4'
     restricted_build_dmap = dataset_dir / 'build.ccp4'
     pdb_file = dataset_dir / f'{dtag}-pandda-input.pdb'
     restricted_pdb_file = dataset_dir / 'build.pdb'
