@@ -65,6 +65,8 @@ def sbatch(script, script_file):
         stderr=subprocess.PIPE,
         )
     stdout, stderr = p.communicate()
+    print(stdout)
+    print(stderr)
     
 def save_xmap(xmap, xmap_file):
     """Convenience script for saving ccp4 files."""
