@@ -8,7 +8,7 @@ import numpy as np
 import sys
 
 
-SCRIPT = """#/bin/sh
+SCRIPT = """#!/bin/sh
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=5120
