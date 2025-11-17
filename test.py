@@ -177,7 +177,7 @@ def main(pandda_dir):
         )
         coord = [x,y,z]
         print(f'{dtag} : {event_idx}')
-        dataset_dir = pandda_dir / 'processed_datasets' / dtag
+        dataset_dir = (pandda_dir / 'processed_datasets' / dtag).resolve()
         ligand_dir = dataset_dir / 'ligand_files'
         script_file = dataset_dir / f'rhofit_{event_idx}.slurm'
         build_dmap = dataset_dir / f'{dtag}-z_map.native.ccp4'
