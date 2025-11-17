@@ -172,24 +172,24 @@ def main(dataset_dir):
     event_yaml_path = dataset_dir / 'events.yaml'
     print(f'Getting event info from: {event_yaml_path}')
     with open(event_yaml_path, 'r') as f:
-        event_info = yaml.safe_load(f)
+        events_info = yaml.safe_load(f)
     
     event_scores = {}
-    for event_id, event_info in event_info.items():
+    for event_id, event_info in events_info.items():
         event_scores[event_id] = event_info['Score']
 
     best_event_id = max(event_scores, key=lambda _x: event_scores[_x])
 
     # Submit jobs
     print('# Jobs')
-    print(event_info)
+    print(events_info)
     dtag = dataset_dir.name
     event_idx, bdc, x, y, z = (
         best_event_id,
-        1-event_info[best_event_id]['BDC'], 
-        event_info[best_event_id]['Centroid'][0],
-        event_info[best_event_id]['Centroid'][1],
-        event_info[best_event_id]['Centroid'][2], 
+        1-events_info[best_event_id]['BDC'], 
+        events_info[best_event_id]['Centroid'][0],
+        events_info[best_event_id]['Centroid'][1],
+        events_info[best_event_id]['Centroid'][2], 
         )
     coord = [x,y,z]
     print(f'{dtag} : {event_idx}')
