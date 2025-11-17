@@ -20,9 +20,7 @@ SBATCH_SHELL = """#!/bin/sh
 
 """
 
-SCRIPT = """
-
-module load buster
+SCRIPT = """module load buster
 # (probably module load pandda2 here)
             
 DATASET_DIR="{dataset_dir}"
