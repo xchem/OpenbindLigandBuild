@@ -217,7 +217,7 @@ def main(pandda_dir):
         if len(cifs) != 0:
             sbatch(
                 SCRIPT.format(
-                    pandda_dir=pandda_dir,
+                    pandda_dir=pandda_dir.resolve(),
                     dtag=dtag,
                     build_map=build_dmap.name,
                     cif=cifs[0].name,
