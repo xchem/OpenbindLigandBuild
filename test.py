@@ -24,7 +24,7 @@ MODELLED_STRUCTURES_DIR="$DATASET_DIR"/modelled_structures
 PDB="$DATASET_DIR"/build.pdb
 MTZ="$DATASET_DIR"/{dtag}-pandda-input.mtz
 MAP="$DATASET_DIR"/{build_map}
-CIF={cif}
+CIF="$DATASET_DIR"/ligand_files/{cif}
 OUT="$MODELLED_STRUCTURES_DIR"/rhofit
 
 mkdir "$OUT"
@@ -220,7 +220,7 @@ def main(pandda_dir):
                     pandda_dir=pandda_dir,
                     dtag=dtag,
                     build_map=build_dmap.name,
-                    cif=cifs[0],
+                    cif=cifs[0].name,
                     pandda_2_dir=PANDDA_2_DIR,
                     cut=dmap_cut,
                     python=python,
