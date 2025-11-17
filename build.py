@@ -82,6 +82,10 @@ def read_pandda_map(xmap_file):
     dmap = dmap_ccp4.grid 
     return dmap
 
+def get_map_cut(xmap, cut):
+    xmap_array = np.array(xmap, copy=False)
+    return cut * np.std(xmap_array[xmap_array!= 0.0])
+
 def expand_event_map(bdc, ground_state_file, xmap_file, coord, out_file):
     """DEPRECATED. A method for recalculating event maps over the full cell."""
     ground_state_ccp4 = gemmi.read_ccp4_map(str(ground_state_file), setup=False)
@@ -203,7 +207,7 @@ def main(dataset_dir):
     restricted_pdb_file = dataset_dir / 'build.pdb'
     python = sys.executable
     merge_script = pathlib.Path(python).parent.parent.parent / 'merge.py'
-    dmap_cut = 2.0  # This is usually quite a good contour for building and consistent 
+    dmap_cut = 2.0   # This is usually quite a good contour for building and consistent 
                     # (usually) with the cutoffs PanDDA 2 uses for event finding
 
     # Rhofit can be confused by hunting non-binding site density. This can be avoided
@@ -226,6 +230,9 @@ def main(dataset_dir):
 
     print('# # Script File')
     print(script_file)
+
+    # Get the cut for rhofit
+    cut = get_map_cut(dmap, 2.0)
     
     # Really all the cifs should be tried and the best used, or it should try the best 
     # cif from PanDDA
@@ -242,7 +249,7 @@ def main(dataset_dir):
                     build_map=restricted_build_dmap.name,
                     cif=cifs[0].name,
                     pandda_2_dir=PANDDA_2_DIR,
-                    cut=dmap_cut,
+                    cut=cut,
                     python=python,
                     merge_script= merge_script,
                 )
