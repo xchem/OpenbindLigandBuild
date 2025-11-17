@@ -185,7 +185,7 @@ def main(pandda_dir):
         pdb_file = dataset_dir / f'{dtag}-pandda-input.pdb'
         restricted_pdb_file = dataset_dir / 'build.pdb'
         python = sys.executable
-        merge_script = pathlib.Path(python) / 'merge.py'
+        merge_script = pathlib.Path(python).parent.parent.parent / 'merge.py'
         dmap_cut = 2.0  # This is usually quite a good contour for building and consistent 
                         # (usually) with the cutoffs PanDDA 2 uses for event finding
 
