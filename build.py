@@ -239,7 +239,7 @@ def main(dataset_dir):
                 script=SCRIPT.format(
                     dataset_dir=dataset_dir,
                     dtag=dtag,
-                    build_map=build_dmap.name,
+                    build_map=restricted_build_dmap.name,
                     cif=cifs[0].name,
                     pandda_2_dir=PANDDA_2_DIR,
                     cut=dmap_cut,
